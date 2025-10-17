@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { signUp } from "@/actions/auth";
+import { useState } from "react";
 
 export default function SignUpPage() {
   const [error, setError] = useState<string>("");
@@ -55,24 +55,20 @@ export default function SignUpPage() {
               id="password"
               name="password"
               required
-              minLength={6}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p className="mt-1 text-xs text-gray-500">
-              6文字以上で入力してください
-            </p>
           </div>
 
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
           >
-            登録する
+            登録
           </button>
         </form>
 
         <p className="mt-4 text-center text-sm text-gray-600">
-          既にアカウントをお持ちの方は{" "}
+          すでにアカウントをお持ちの方は{" "}
           <a href="/login" className="text-blue-600 hover:underline">
             ログイン
           </a>

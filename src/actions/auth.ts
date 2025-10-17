@@ -11,18 +11,26 @@ export async function signUp(formData: FormData) {
     return { error: "メールアドレスとパスワードを入力してください" };
   }
 
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
 
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
 
-  if (error) {
-    return { error: error.message };
+    if (error) {
+      return { error: error.message };
+    }
+
+    // サインアップ成功時はメール確認案内ページへ遷移
+    redirect("/signup/verify");
+  } catch (err) {
+    if (err instanceof Error && err.message.includes("NEXT_REDIRECT")) {
+      throw err;
+    }
+    return { error: err instanceof Error ? err.message : "登録に失敗しました" };
   }
-
-  redirect("/login?message=登録が完了しました。ログインしてください。");
 }
 
 export async function signIn(formData: FormData) {

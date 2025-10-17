@@ -2,6 +2,17 @@ import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
+  // Early return for Next internals and Server Actions endpoints
+  const p = request.nextUrl.pathname;
+  if (
+    p.startsWith("/_next") ||
+    p.startsWith("/_vercel") ||
+    p.startsWith("/_actions") ||
+    p.startsWith("/api")
+  ) {
+    return NextResponse.next();
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   });
