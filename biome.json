@@ -28,9 +28,10 @@
     }
   },
   "assist": {
+    "enabled": false,
     "actions": {
       "source": {
-        "organizeImports": "on"
+        "organizeImports": "off"
       }
     }
   }

@@ -9,7 +9,9 @@ export default function VerifyEmailPage() {
           登録いただきありがとうございます。確認メールを送信しました。
         </p>
         <ul className="list-disc pl-5 space-y-2 text-gray-700 mb-6">
-          <li>メールに記載されたリンクをクリックして認証を完了してください。</li>
+          <li>
+            メールに記載されたリンクをクリックして認証を完了してください。
+          </li>
           <li>届かない場合は迷惑メールフォルダもご確認ください。</li>
           <li>
             数分待っても届かない場合は、少し時間をおいて再度お試しください。
@@ -26,4 +28,3 @@ export default function VerifyEmailPage() {
     </div>
   );
 }
-

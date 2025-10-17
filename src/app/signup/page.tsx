@@ -1,7 +1,7 @@
 "use client";
 
-import { signUp } from "@/actions/auth";
 import { useState } from "react";
+import { signUp } from "@/actions/auth";
 
 export default function SignUpPage() {
   const [error, setError] = useState<string>("");

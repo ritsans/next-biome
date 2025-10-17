@@ -4,5 +4,7 @@
     "source.fixAll.biome": "explicit",
     "source.organizeImports": "always"
   },
-  "editor.defaultFormatter": "biomejs.biome"
+  "editor.defaultFormatter": "biomejs.biome",
+  "biome.lsp.features.assists.source.organizeImports": false,
+  "cSpell.words": ["supabase"]
 }
