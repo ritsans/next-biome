@@ -12,11 +12,20 @@ export async function signUp(formData: FormData) {
   }
 
   try {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
+    if (!siteUrl) {
+      return { error: "NEXT_PUBLIC_SITE_URL が設定されていません" };
+    }
+
     const supabase = await createClient();
 
     const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${siteUrl}/auth/callback`,
+      },
     });
 
     if (error) {
