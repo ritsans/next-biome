@@ -28,6 +28,7 @@ npm start            # 本番サーバーを起動
 npm run lint         # Biomeでコードをチェック
 npm run format       # Biomeでコードを自動フォーマット
 ```
+30行以上コードを出力した場合にのみ、自動でLintを実行させること
 
 ## Architecture
 
