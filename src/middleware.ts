@@ -48,15 +48,33 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 認証が必要なページ（/mypage, /logout）へのアクセス制御
+  const pathname = request.nextUrl.pathname;
+
+  // 認証が必要なページ（/mypage, /logout, /onboarding）へのアクセス制御
   if (
     !user &&
-    (request.nextUrl.pathname.startsWith("/mypage") ||
-      request.nextUrl.pathname.startsWith("/logout"))
+    (pathname.startsWith("/mypage") ||
+      pathname.startsWith("/logout") ||
+      pathname.startsWith("/onboarding"))
   ) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
+  }
+
+  // プロフィール未完了ユーザーが/mypageにアクセスした場合は/onboardingへリダイレクト
+  if (user && pathname.startsWith("/mypage")) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("id", user.id)
+      .single();
+
+    if (!profile || !profile.display_name) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/onboarding";
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;

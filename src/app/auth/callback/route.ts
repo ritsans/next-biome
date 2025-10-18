@@ -39,6 +39,25 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  // プロフィールチェック: display_nameが未設定なら初回ユーザーとみなす
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("id", user.id)
+      .single();
+
+    // display_nameが未設定の場合はオンボーディングへ
+    if (!profile || !profile.display_name) {
+      const onboardingUrl = new URL("/onboarding", url);
+      return NextResponse.redirect(onboardingUrl);
+    }
+  }
+
   const redirectUrl = new URL("/mypage", url);
   return NextResponse.redirect(redirectUrl);
 }
