@@ -3,16 +3,44 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { signIn } from "@/actions/auth";
+import { signInSchema } from "@/lib/validations";
 
 export default function LoginPage() {
-  const [error, setError] = useState<string>("");
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {},
+  );
+  const [serverError, setServerError] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setErrors({});
+    setServerError("");
+
+    const validation = signInSchema.safeParse({ email, password });
+
+    if (!validation.success) {
+      const fieldErrors: { email?: string; password?: string } = {};
+      for (const error of validation.error.errors) {
+        const field = error.path[0] as "email" | "password";
+        if (!fieldErrors[field]) {
+          fieldErrors[field] = error.message;
+        }
+      }
+      setErrors(fieldErrors);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+
     const result = await signIn(formData);
     if (result?.error) {
-      setError(result.error);
+      setServerError(result.error);
     }
   }
 
@@ -29,13 +57,13 @@ export default function LoginPage() {
           </div>
         )}
 
-        {error && (
+        {serverError && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {error}
+            {serverError}
           </div>
         )}
 
-        <form action={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
               htmlFor="email"
@@ -44,12 +72,16 @@ export default function LoginPage() {
               メールアドレス
             </label>
             <input
-              type="email"
+              type="text"
               id="email"
               name="email"
-              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+            )}
           </div>
 
           <div>
@@ -63,9 +95,13 @@ export default function LoginPage() {
               type="password"
               id="password"
               name="password"
-              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+            )}
           </div>
 
           <button

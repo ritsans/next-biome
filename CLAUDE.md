@@ -13,6 +13,7 @@ Next.js 15.5アプリケーション（App Router使用）で、Biomeをリン�
 - **TypeScript**
 - **Tailwind CSS v4**
 - **Biome** (ESLintとPrettierの代替として使用)
+- **Zod** (バリデーションライブラリ)
 
 ## Essential Commands
 
@@ -32,12 +33,28 @@ npm run format       # Biomeでコードを自動フォーマット
 
 ## Architecture
 
+### Validation System
+- **Zod** (`^3.25.76`) を使用したバリデーション
+- **スキーマ定義**: `src/lib/validations.ts`
+  - `signUpSchema` - 新規登録（email形式チェック、password 6文字以上）
+  - `signInSchema` - ログイン（email形式チェック、password 1文字以上）
+  - `profileSchema` - プロフィール（username、display_name、bio、avatar_url）
+- **実装パターン**:
+  - Server Actions: Zodで`safeParse()`し、エラーは`{ error: string }`形式で返却
+  - Client Components: フィールドごとに状態管理（controlled components）
+  - HTML5バリデーション無効化（`type="text"`, `required`属性なし）
+  - `onSubmit`で`e.preventDefault()`を使用
+  - 各入力欄直下に赤色テキストでエラー表示（`text-red-600`）
+  - サーバーエラーはフォーム上部に表示
+
 ### Authentication System
 - **Supabase Auth**を使用した認証システムを実装
 - **Server Actions** (`src/actions/auth.ts`) でサーバーサイド認証処理
-  - `signUp()` - 新規登録
-  - `signIn()` - ログイン
+  - `signUp()` - 新規登録（Zodバリデーション付き）
+  - `signIn()` - ログイン（Zodバリデーション付き）
   - `signOut()` - ログアウト
+- **Server Actions** (`src/actions/profile.ts`) でプロフィール管理
+  - `updateProfile()` - プロフィール更新（Zodバリデーション付き）
 - **Middleware** (`src/middleware.ts`) で認証保護とセッション管理
   - `/mypage`と`/logout`は認証必須
   - 未認証時は自動的に`/login`へリダイレクト
@@ -66,13 +83,18 @@ npm run format       # Biomeでコードを自動フォーマット
 - `src/app/` - Next.js App Routerのルートディレクトリ
   - `layout.tsx` - ルートレイアウト（Header/Footer含む）
   - `page.tsx` - ホームページ
-  - `login/` - ログインページ
+  - `login/` - ログインページ（Zodバリデーション実装済み）
   - `signup/` - 新規登録ページ
   - `mypage/` - 認証保護されたマイページ
   - `logout/` - ログアウトページ
+  - `onboarding/` - 初回プロフィール設定ページ
 - `src/actions/` - Server Actions
+  - `auth.ts` - 認証関連アクション（Zodバリデーション実装済み）
+  - `profile.ts` - プロフィール管理アクション（Zodバリデーション実装済み）
 - `src/components/` - 再利用可能なコンポーネント
   - `Header.tsx` - 認証状態に応じてナビゲーション切り替え
+- `src/lib/` - 共通ライブラリ
+  - `validations.ts` - Zodバリデーションスキーマ定義
 - `src/utils/` - ユーティリティ関数
 - `src/middleware.ts` - Next.js Middleware（認証チェック）
 

@@ -24,8 +24,8 @@ importers:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
       zod:
-        specifier: ^4.1.12
-        version: 4.1.12
+        specifier: ^3.25.76
+        version: 3.25.76
     devDependencies:
       '@biomejs/biome':
         specifier: 2.2.0
@@ -672,8 +672,8 @@ packages:
     resolution: {integrity: sha512-YgvUTfwqyc7UXVMrB+SImsVYSmTS8X/tSrtdNZMImM+n7+QTriRXyXim0mBrTXNeqzVF0KWGgHPeiyViFFrNDw==}
     engines: {node: '>=18'}
 
-  zod@4.1.12:
-    resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
 snapshots:
 
@@ -1193,4 +1193,4 @@ snapshots:
 
   yallist@5.0.0: {}
 
-  zod@4.1.12: {}
+  zod@3.25.76: {}
