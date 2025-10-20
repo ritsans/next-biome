@@ -41,6 +41,7 @@ npm run format       # Biomeでコードを自動フォーマット
   - `profileSchema` - プロフィール（username、display_name、bio、avatar_url）
 - **実装パターン**:
   - Server Actions: Zodで`safeParse()`し、エラーは`{ error: string }`形式で返却
+  - Server Actionsで`useActionState`を使う場合は`(prevState, formData) => Promise<{error: string} | null>`の型シグネチャを使用
   - Client Components: フィールドごとに状態管理（controlled components）
   - HTML5バリデーション無効化（`type="text"`, `required`属性なし）
   - `onSubmit`で`e.preventDefault()`を使用
@@ -63,7 +64,10 @@ npm run format       # Biomeでコードを自動フォーマット
 ### Supabase Client Configuration
 - **Client-side**: `src/utils/supabase/client.ts` - ブラウザ用クライアント
 - **Server-side**: `src/utils/supabase/server.ts` - Server Components/Actions用クライアント
-- 環境変数必須: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- **環境変数必須**:
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+  - `NEXT_PUBLIC_SITE_URL` (ユーザー登録に必要、例: `http://localhost:3000`)
 
 ### Database Schema
 - **`profiles` テーブル** (`auth.users` に外部キー)
@@ -92,11 +96,18 @@ npm run format       # Biomeでコードを自動フォーマット
   - `auth.ts` - 認証関連アクション（Zodバリデーション実装済み）
   - `profile.ts` - プロフィール管理アクション（Zodバリデーション実装済み）
 - `src/components/` - 再利用可能なコンポーネント
-  - `Header.tsx` - 認証状態に応じてナビゲーション切り替え
+  - `Header.tsx` - 認証状態とパスに応じてナビゲーション切り替え
+    - 未ログイン（ホーム）: 「ログイン」リンク表示
+    - ログイン/新規登録ページ: 「ホーム」リンクのみ表示
+    - ログイン済み: 「マイページ」「ログアウト」リンク表示
+    - middlewareから`x-pathname`ヘッダーを受け取りページ判定
 - `src/lib/` - 共通ライブラリ
   - `validations.ts` - Zodバリデーションスキーマ定義
 - `src/utils/` - ユーティリティ関数
 - `src/middleware.ts` - Next.js Middleware（認証チェック）
+  - 認証保護: `/mypage`, `/logout`, `/onboarding`へのアクセス制御
+  - プロフィール未完了チェック: display_nameが未設定なら`/onboarding`へリダイレクト
+  - `x-pathname`ヘッダーをレスポンスに追加（Header.tsxで使用）
 
 ### Path Aliases
 - `@/*` は `./src/*` にマップされています（例: `import Component from '@/components/Button'`）
