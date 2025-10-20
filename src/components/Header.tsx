@@ -10,7 +10,7 @@ export default async function Header() {
     const headersList = await headers();
     const pathname = headersList.get("x-pathname") || "";
 
-    const isLoginPage = pathname === "/login";
+    const isAuthPage = pathname === "/login" || pathname === "/signup";
 
     return (
         <header className="bg-blue-600 text-white">
@@ -21,8 +21,8 @@ export default async function Header() {
                     </h1>
                     <nav>
                         <ul className="flex gap-6">
-                            {/*Login Page Only*/}
-                            {isLoginPage ? (
+                            {/*Login/Signup Page Only*/}
+                            {isAuthPage ? (
                                 <li>
                                     <a href="/" className="hover:underline">
                                         ホーム

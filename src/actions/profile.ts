@@ -4,7 +4,10 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { profileSchema } from "@/lib/validations";
 
-export async function updateProfile(formData: FormData) {
+export async function updateProfile(
+  _prevState: { error: string } | null,
+  formData: FormData,
+): Promise<{ error: string } | null> {
   const username = formData.get("username") as string;
   const displayName = formData.get("display_name") as string;
   const bio = formData.get("bio") as string;
