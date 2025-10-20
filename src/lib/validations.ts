@@ -20,3 +20,11 @@ export const profileSchema = z.object({
   bio: z.string().max(500, "自己紹介は500文字以下で入力してください").optional(),
   avatar_url: z.string().url("有効なURLを入力してください").optional().or(z.literal("")),
 });
+
+export const resetPasswordRequestSchema = z.object({
+  email: z.string().email("有効なメールアドレスを入力してください"),
+});
+
+export const resetPasswordSchema = z.object({
+  password: z.string().min(6, "パスワードは6文字以上で入力してください"),
+});

@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+/*  button element a hand cursor by default */
+@layer utilities {
+    button {
+        cursor: pointer;
+    }
+}

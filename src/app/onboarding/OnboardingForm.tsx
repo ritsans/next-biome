@@ -16,11 +16,7 @@ export default function OnboardingForm({
 
   return (
     <form action={formAction} className="mt-8 space-y-6">
-      {state?.error && (
-        <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-          {state.error}
-        </div>
-      )}
+      {state?.error && <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">{state.error}</div>}
 
       <div className="rounded-md shadow-sm space-y-4">
         {/* Username */}
