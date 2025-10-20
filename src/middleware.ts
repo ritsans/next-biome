@@ -66,6 +66,9 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // パス情報をヘッダーに追加
+  supabaseResponse.headers.set("x-pathname", pathname);
+
   return supabaseResponse;
 }
 
