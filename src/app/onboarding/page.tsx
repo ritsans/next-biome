@@ -31,12 +31,8 @@ export default async function OnboardingPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            ようこそ！
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            プロフィールを設定して始めましょう
-          </p>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">ようこそ！</h2>
+          <p className="mt-2 text-center text-sm text-gray-600">プロフィールを設定して始めましょう</p>
         </div>
 
         <OnboardingForm
@@ -63,10 +59,7 @@ function OnboardingForm({
       <div className="rounded-md shadow-sm space-y-4">
         {/* Username */}
         <div>
-          <label
-            htmlFor="username"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700">
             ユーザー名 <span className="text-red-600 font-bold">*</span>
           </label>
           <input
@@ -79,20 +72,13 @@ function OnboardingForm({
             className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="例: user_name123"
           />
-          <p className="mt-1 text-xs text-gray-500">
-            3〜30文字の小文字英数字とアンダースコア
-          </p>
-          <p className="mt-1 text-xs text-red-600 font-semibold">
-            ⚠️ ユーザー名は後から変更できません
-          </p>
+          <p className="mt-1 text-xs text-gray-500">3〜30文字の小文字英数字とアンダースコア</p>
+          <p className="mt-1 text-xs text-red-600 font-semibold">⚠️ ユーザー名は後から変更できません</p>
         </div>
 
         {/* Display Name */}
         <div>
-          <label
-            htmlFor="display_name"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="display_name" className="block text-sm font-medium text-gray-700">
             表示名 <span className="text-red-600 font-bold">*</span>
           </label>
           <input
@@ -108,10 +94,7 @@ function OnboardingForm({
 
         {/* Bio */}
         <div>
-          <label
-            htmlFor="bio"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
             自己紹介 <span className="text-gray-500 text-xs">(任意)</span>
           </label>
           <textarea
@@ -126,12 +109,8 @@ function OnboardingForm({
 
         {/* Avatar URL */}
         <div>
-          <label
-            htmlFor="avatar_url"
-            className="block text-sm font-medium text-gray-700"
-          >
-            アバター画像URL{" "}
-            <span className="text-gray-500 text-xs">(任意)</span>
+          <label htmlFor="avatar_url" className="block text-sm font-medium text-gray-700">
+            アバター画像URL <span className="text-gray-500 text-xs">(任意)</span>
           </label>
           <input
             id="avatar_url"

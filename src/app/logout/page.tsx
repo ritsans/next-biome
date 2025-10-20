@@ -14,9 +14,7 @@ export default async function LogoutPage() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md text-center">
-        <h1 className="text-3xl font-bold mb-6 text-gray-800">
-          ログアウトしました
-        </h1>
+        <h1 className="text-3xl font-bold mb-6 text-gray-800">ログアウトしました</h1>
 
         <p className="text-gray-600 mb-8">
           ログアウトが完了しました。

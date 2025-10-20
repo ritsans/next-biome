@@ -4,12 +4,7 @@ import { type NextRequest, NextResponse } from "next/server";
 export async function middleware(request: NextRequest) {
   // Early return for Next internals and Server Actions endpoints
   const p = request.nextUrl.pathname;
-  if (
-    p.startsWith("/_next") ||
-    p.startsWith("/_vercel") ||
-    p.startsWith("/_actions") ||
-    p.startsWith("/api")
-  ) {
+  if (p.startsWith("/_next") || p.startsWith("/_vercel") || p.startsWith("/_actions") || p.startsWith("/api")) {
     return NextResponse.next();
   }
 
@@ -53,9 +48,7 @@ export async function middleware(request: NextRequest) {
   // 認証が必要なページ（/mypage, /logout, /onboarding）へのアクセス制御
   if (
     !user &&
-    (pathname.startsWith("/mypage") ||
-      pathname.startsWith("/logout") ||
-      pathname.startsWith("/onboarding"))
+    (pathname.startsWith("/mypage") || pathname.startsWith("/logout") || pathname.startsWith("/onboarding"))
   ) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
@@ -64,11 +57,7 @@ export async function middleware(request: NextRequest) {
 
   // プロフィール未完了ユーザーが/mypageにアクセスした場合は/onboardingへリダイレクト
   if (user && pathname.startsWith("/mypage")) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("display_name")
-      .eq("id", user.id)
-      .single();
+    const { data: profile } = await supabase.from("profiles").select("display_name").eq("id", user.id).single();
 
     if (!profile || !profile.display_name) {
       const url = request.nextUrl.clone();

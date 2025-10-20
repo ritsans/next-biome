@@ -15,10 +15,7 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (error) {
-      const redirectUrl = new URL(
-        `/login?error=${encodeURIComponent(error.message)}`,
-        url,
-      );
+      const redirectUrl = new URL(`/login?error=${encodeURIComponent(error.message)}`, url);
       return NextResponse.redirect(redirectUrl);
     }
   } else if (accessToken && refreshToken) {
@@ -28,10 +25,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (error) {
-      const redirectUrl = new URL(
-        `/login?error=${encodeURIComponent(error.message)}`,
-        url,
-      );
+      const redirectUrl = new URL(`/login?error=${encodeURIComponent(error.message)}`, url);
       return NextResponse.redirect(redirectUrl);
     }
   } else {
@@ -45,11 +39,7 @@ export async function GET(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   if (user) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("display_name")
-      .eq("id", user.id)
-      .single();
+    const { data: profile } = await supabase.from("profiles").select("display_name").eq("id", user.id).single();
 
     // display_nameが未設定の場合はオンボーディングへ
     if (!profile || !profile.display_name) {

@@ -55,8 +55,7 @@ export async function updateProfile(formData: FormData) {
       throw err;
     }
     return {
-      error:
-        err instanceof Error ? err.message : "プロフィール更新に失敗しました",
+      error: err instanceof Error ? err.message : "プロフィール更新に失敗しました",
     };
   }
 }
