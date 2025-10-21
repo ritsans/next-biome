@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { profileSchema } from "@/lib/validations";
+import { errorToJP } from "@/lib/errors";
 
 export async function updateProfile(
   _prevState: { error: string } | null,
@@ -46,10 +47,7 @@ export async function updateProfile(
       .eq("id", user.id);
 
     if (error) {
-      if (error.code === "23505") {
-        return { error: "このユーザー名は既に使用されています" };
-      }
-      return { error: error.message };
+      return { error: errorToJP(error) };
     }
 
     redirect("/mypage");

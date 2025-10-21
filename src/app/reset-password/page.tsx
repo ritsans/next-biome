@@ -9,14 +9,17 @@ export default function ResetPasswordPage() {
   const [serverError, setServerError] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrors({});
     setServerError("");
+    setIsPending(true);
 
     if (password !== confirmPassword) {
       setErrors({ confirmPassword: "パスワードが一致しません" });
+      setIsPending(false);
       return;
     }
 
@@ -31,6 +34,7 @@ export default function ResetPasswordPage() {
         }
       }
       setErrors(fieldErrors);
+      setIsPending(false);
       return;
     }
 
@@ -40,6 +44,7 @@ export default function ResetPasswordPage() {
     const result = await resetPassword(formData);
     if (result?.error) {
       setServerError(result.error);
+      setIsPending(false);
     }
   }
 
@@ -87,9 +92,10 @@ export default function ResetPasswordPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+            disabled={isPending}
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
           >
-            パスワードを変更
+            {isPending ? "処理中..." : "パスワードを変更"}
           </button>
         </form>
       </div>

@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { signUpSchema } from "@/lib/validations";
+import { errorToJP } from "@/lib/errors";
 
 export async function signUp(formData: FormData) {
   const email = formData.get("email") as string;
@@ -32,7 +33,7 @@ export async function signUp(formData: FormData) {
     });
 
     if (error) {
-      return { error: error.message };
+      return { error: errorToJP(error) };
     }
 
     redirect("/signup/verify");

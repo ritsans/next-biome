@@ -1,7 +1,21 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useFormStatus } from "react";
 import { updateProfile } from "@/actions/profile";
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      {pending ? "処理中..." : "プロフィールを設定"}
+    </button>
+  );
+}
 
 export default function OnboardingForm({
   initialUsername,
@@ -86,12 +100,7 @@ export default function OnboardingForm({
       </div>
 
       <div>
-        <button
-          type="submit"
-          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          プロフィールを設定
-        </button>
+        <SubmitButton />
       </div>
     </form>
   );

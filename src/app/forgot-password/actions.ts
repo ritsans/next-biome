@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { resetPasswordRequestSchema } from "@/lib/validations";
+import { errorToJP } from "@/lib/errors";
 
 export async function requestPasswordReset(formData: FormData) {
   const email = formData.get("email") as string;
@@ -26,7 +27,7 @@ export async function requestPasswordReset(formData: FormData) {
     });
 
     if (error) {
-      return { error: error.message };
+      return { error: errorToJP(error) };
     }
 
     return { success: true };

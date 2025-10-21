@@ -9,12 +9,14 @@ export default function ForgotPasswordPage() {
   const [serverError, setServerError] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrors({});
     setServerError("");
     setSuccess(false);
+    setIsPending(true);
 
     const validation = resetPasswordRequestSchema.safeParse({ email });
 
@@ -27,6 +29,7 @@ export default function ForgotPasswordPage() {
         }
       }
       setErrors(fieldErrors);
+      setIsPending(false);
       return;
     }
 
@@ -36,8 +39,10 @@ export default function ForgotPasswordPage() {
     const result = await requestPasswordReset(formData);
     if (result?.error) {
       setServerError(result.error);
+      setIsPending(false);
     } else if (result?.success) {
       setSuccess(true);
+      setIsPending(false);
     }
   }
 
@@ -78,9 +83,10 @@ export default function ForgotPasswordPage() {
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+                disabled={isPending}
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
               >
-                リセットメールを送信
+                {isPending ? "処理中..." : "リセットメールを送信"}
               </button>
             </form>
           </>

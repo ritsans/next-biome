@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { resetPasswordSchema } from "@/lib/validations";
+import { errorToJP } from "@/lib/errors";
 
 export async function resetPassword(formData: FormData) {
   const password = formData.get("password") as string;
@@ -21,7 +22,7 @@ export async function resetPassword(formData: FormData) {
     });
 
     if (error) {
-      return { error: error.message };
+      return { error: errorToJP(error) };
     }
 
     redirect("/login?message=パスワードを変更しました");

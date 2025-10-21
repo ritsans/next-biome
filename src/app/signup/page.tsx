@@ -9,11 +9,13 @@ export default function SignUpPage() {
   const [serverError, setServerError] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrors({});
     setServerError("");
+    setIsPending(true);
 
     const validation = signUpSchema.safeParse({ email, password });
 
@@ -26,6 +28,7 @@ export default function SignUpPage() {
         }
       }
       setErrors(fieldErrors);
+      setIsPending(false);
       return;
     }
 
@@ -36,6 +39,7 @@ export default function SignUpPage() {
     const result = await signUp(formData);
     if (result?.error) {
       setServerError(result.error);
+      setIsPending(false);
     }
   }
 
@@ -81,9 +85,10 @@ export default function SignUpPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+            disabled={isPending}
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
           >
-            登録
+            {isPending ? "処理中..." : "登録"}
           </button>
         </form>
 

@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { type NextRequest, NextResponse } from "next/server";
+import { errorToJP } from "@/lib/errors";
 
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (error) {
-      const redirectUrl = new URL(`/login?error=${encodeURIComponent(error.message)}`, url);
+      const redirectUrl = new URL(`/login?error=${encodeURIComponent(errorToJP(error))}`, url);
       return NextResponse.redirect(redirectUrl);
     }
   } else if (accessToken && refreshToken) {
@@ -25,11 +26,11 @@ export async function GET(request: NextRequest) {
     });
 
     if (error) {
-      const redirectUrl = new URL(`/login?error=${encodeURIComponent(error.message)}`, url);
+      const redirectUrl = new URL(`/login?error=${encodeURIComponent(errorToJP(error))}`, url);
       return NextResponse.redirect(redirectUrl);
     }
   } else {
-    const redirectUrl = new URL(`/login?error=missing_credentials`, url);
+    const redirectUrl = new URL(`/login?error=${encodeURIComponent("認証情報が不足しています")}`, url);
     return NextResponse.redirect(redirectUrl);
   }
 

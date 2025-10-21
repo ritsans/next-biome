@@ -10,6 +10,7 @@ export default function LoginPage() {
   const [serverError, setServerError] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isPending, setIsPending] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
 
@@ -17,6 +18,7 @@ export default function LoginPage() {
     e.preventDefault();
     setErrors({});
     setServerError("");
+    setIsPending(true);
 
     const validation = signInSchema.safeParse({ email, password });
 
@@ -29,6 +31,7 @@ export default function LoginPage() {
         }
       }
       setErrors(fieldErrors);
+      setIsPending(false);
       return;
     }
 
@@ -39,6 +42,7 @@ export default function LoginPage() {
     const result = await signIn(formData);
     if (result?.error) {
       setServerError(result.error);
+      setIsPending(false);
     }
   }
 
@@ -88,9 +92,10 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+            disabled={isPending}
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
           >
-            ログイン
+            {isPending ? "処理中..." : "ログイン"}
           </button>
         </form>
 
