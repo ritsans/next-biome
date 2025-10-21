@@ -2,7 +2,7 @@
 
 /*  button element a hand cursor by default */
 @layer utilities {
-    button {
-        cursor: pointer;
-    }
+  button {
+    cursor: pointer;
+  }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signUp } from "@/actions/auth";
+import { signUp } from "./actions";
 import { signUpSchema } from "@/lib/validations";
 
 export default function SignUpPage() {

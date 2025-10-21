@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import OnboardingForm from "./OnboardingForm";
+import OnboardingForm from "./form";
 
 export default async function OnboardingPage() {
   const supabase = await createClient();

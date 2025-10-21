@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { requestPasswordReset } from "@/actions/auth";
+import { requestPasswordReset } from "./actions";
 import { resetPasswordRequestSchema } from "@/lib/validations";
 
 export default function ForgotPasswordPage() {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { resetPassword } from "@/actions/auth";
+import { resetPassword } from "./actions";
 import { resetPasswordSchema } from "@/lib/validations";
 
 export default function ResetPasswordPage() {

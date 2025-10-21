@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { signIn } from "@/actions/auth";
+import { signIn } from "./actions";
 import { signInSchema } from "@/lib/validations";
 
 export default function LoginPage() {
