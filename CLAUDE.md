@@ -33,6 +33,24 @@ npm run format       # Biomeでコードを自動フォーマット
 
 ## Architecture
 
+### Code Organization Principles
+**Server-side と Client-side のロジックは明確に分離し、関連するファイルはできるだけ同じディレクトリに配置する**
+
+- **コロケーションパターン**: ページディレクトリ内に関連するServer ActionsとClient Componentsを配置
+  ```
+  src/app/login/
+  ├── page.tsx       (Client Component - フォームなどのUI)
+  └── actions.ts     (Server Actions - 認証処理など)
+  ```
+- **Server Actions**: 各ページディレクトリ内の `actions.ts` に配置
+  - ページ固有のロジック（login, signup, forgot-password, reset-password）
+  - **例外**: 複数ページで共有するロジックは `src/actions/` に配置（例: `profile.ts`）
+- **Client Components**: ページ内で分離が必要な場合は同ディレクトリ内に配置
+  - ファイル名: `form.tsx`, `client-component.tsx` など簡潔な名前
+  - 例: `onboarding/form.tsx` - オンボーディング専用のフォームコンポーネント
+- **再利用可能なコンポーネント**: `src/components/` に配置
+  - 複数ページで使用されるUI部品のみ
+
 ### Validation System
 - **Zod** (`^3.25.76`) を使用したバリデーション
 - **スキーマ定義**: `src/lib/validations.ts`
@@ -50,14 +68,14 @@ npm run format       # Biomeでコードを自動フォーマット
 
 ### Authentication System
 - **Supabase Auth**を使用した認証システムを実装
-- **Server Actions** (`src/actions/auth.ts`) でサーバーサイド認証処理
-  - `signUp()` - 新規登録（Zodバリデーション付き）
-  - `signIn()` - ログイン（Zodバリデーション付き）
-  - `signOut()` - ログアウト
-- **Server Actions** (`src/actions/profile.ts`) でプロフィール管理
-  - `updateProfile()` - プロフィール更新（Zodバリデーション付き）
+- **Server Actions** - 各ページディレクトリ内の `actions.ts` に配置
+  - `login/actions.ts`: `signIn()` - ログイン処理
+  - `signup/actions.ts`: `signUp()` - 新規登録処理
+  - `forgot-password/actions.ts`: `requestPasswordReset()` - パスワードリセット要求
+  - `reset-password/actions.ts`: `resetPassword()` - パスワードリセット実行
+  - `src/actions/profile.ts`: `updateProfile()` - プロフィール更新（複数ページで共有）
 - **Middleware** (`src/middleware.ts`) で認証保護とセッション管理
-  - `/mypage`と`/logout`は認証必須
+  - `/mypage`、`/logout`、`/onboarding`は認証必須
   - 未認証時は自動的に`/login`へリダイレクト
   - セッションの自動更新（トークンリフレッシュ）
 
@@ -87,14 +105,25 @@ npm run format       # Biomeでコードを自動フォーマット
 - `src/app/` - Next.js App Routerのルートディレクトリ
   - `layout.tsx` - ルートレイアウト（Header/Footer含む）
   - `page.tsx` - ホームページ
-  - `login/` - ログインページ（Zodバリデーション実装済み）
+  - `login/` - ログインページ
+    - `page.tsx` - Client Component（フォームUI、Zodバリデーション実装済み）
+    - `actions.ts` - Server Actions（`signIn`）
   - `signup/` - 新規登録ページ
+    - `page.tsx` - Client Component（フォームUI、Zodバリデーション実装済み）
+    - `actions.ts` - Server Actions（`signUp`）
+  - `forgot-password/` - パスワードリセット要求ページ
+    - `page.tsx` - Client Component
+    - `actions.ts` - Server Actions（`requestPasswordReset`）
+  - `reset-password/` - パスワードリセット実行ページ
+    - `page.tsx` - Client Component
+    - `actions.ts` - Server Actions（`resetPassword`）
   - `mypage/` - 認証保護されたマイページ
-  - `logout/` - ログアウトページ
+  - `logout/` - ログアウト処理（Server Component、即座にログアウト→トップページへ）
   - `onboarding/` - 初回プロフィール設定ページ
-- `src/actions/` - Server Actions
-  - `auth.ts` - 認証関連アクション（Zodバリデーション実装済み）
-  - `profile.ts` - プロフィール管理アクション（Zodバリデーション実装済み）
+    - `page.tsx` - Server Component（データ取得）
+    - `form.tsx` - Client Component（フォームUI）
+- `src/actions/` - 共有Server Actions
+  - `profile.ts` - プロフィール管理（`updateProfile`、複数ページで使用）
 - `src/components/` - 再利用可能なコンポーネント
   - `Header.tsx` - 認証状態とパスに応じてナビゲーション切り替え
     - 未ログイン（ホーム）: 「ログイン」リンク表示
